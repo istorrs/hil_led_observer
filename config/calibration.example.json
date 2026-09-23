@@ -1,0 +1,21 @@
+{
+  "roi": {
+    "x": 100,
+    "y": 80,
+    "width": 32,
+    "height": 32
+  },
+  "luminosity_on_threshold": 122.4,
+  "luminosity_off_threshold": 84.6,
+  "hsv_lower": [
+    50,
+    125,
+    0
+  ],
+  "hsv_upper": [
+    70,
+    255,
+    255
+  ],
+  "color_ratio_min": 0.5
+}

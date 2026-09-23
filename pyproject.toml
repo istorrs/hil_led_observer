@@ -1,0 +1,63 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "led-observer"
+version = "0.1.0"
+description = "Optical LED state/cadence observer service for Hardware-In-The-Loop (HIL) test harnesses"
+readme = "README.md"
+requires-python = ">=3.10,<3.13"
+license = { text = "MIT" }
+dependencies = [
+    "opencv-python>=4.9,<5",
+    "numpy>=1.26,<3",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "ruff>=0.6",
+    "mypy>=1.11",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/led_observer"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+src = ["src", "tests", "examples"]
+
+[tool.ruff.lint]
+select = ["E", "F", "B", "I", "UP", "SIM"]
+# Camera hardware access and OpenCV/NumPy interop routinely need runtime
+# fallbacks and dynamic shapes that these two rules flag as false positives.
+ignore = []
+
+[tool.ruff.lint.isort]
+known-first-party = ["led_observer", "tests"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+files = ["src", "tests", "examples"]
+mypy_path = "src"
+explicit_package_bases = true
+
+[[tool.mypy.overrides]]
+module = ["cv2.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--strict-markers -ra"
+
+[tool.coverage.run]
+source = ["src/led_observer"]
+branch = true
+
+[tool.coverage.report]
+fail_under = 90
+show_missing = true
