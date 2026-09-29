@@ -11,7 +11,8 @@ from dataclasses import dataclass, field
 from enum import Enum
 
 
-class LEDState(str, Enum):
+# Keep Enum's string representation for existing callers.
+class LEDState(str, Enum):  # noqa: UP042
     """Discrete classification of the observed LED's optical behavior."""
 
     OFF = "OFF"

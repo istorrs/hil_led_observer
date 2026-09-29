@@ -14,7 +14,7 @@ SHA gives the most reproducible result; a release tag is also supported.
 In another project's `requirements.txt`:
 
 ```text
-led-observer @ git+https://github.com/istorrs/hil_led_observer.git@v0.1.0
+led-observer @ git+https://github.com/istorrs/hil_led_observer.git@v0.1.1
 ```
 
 Or in its `pyproject.toml`:
@@ -22,7 +22,7 @@ Or in its `pyproject.toml`:
 ```toml
 [project]
 dependencies = [
-    "led-observer @ git+https://github.com/istorrs/hil_led_observer.git@v0.1.0",
+    "led-observer @ git+https://github.com/istorrs/hil_led_observer.git@v0.1.1",
 ]
 ```
 
@@ -30,7 +30,7 @@ For a public repository, the prebuilt wheel attached to the GitHub Release can
 also be installed directly:
 
 ```text
-led-observer @ https://github.com/istorrs/hil_led_observer/releases/download/v0.1.0/led_observer-0.1.0-py3-none-any.whl
+led-observer @ https://github.com/istorrs/hil_led_observer/releases/download/v0.1.1/led_observer-0.1.1-py3-none-any.whl
 ```
 
 The distribution name is `led-observer`; import it as `led_observer`. The Git
@@ -38,10 +38,14 @@ forms require Git and repository access. The wheel URL requires access to the
 release asset. All forms install the runtime dependencies declared in
 `pyproject.toml`.
 
+This package contains only Python code, so its `py3-none-any` wheel works on
+every supported Python version (3.12–3.14). Pip chooses compatible NumPy and
+OpenCV wheels separately for the installing interpreter and platform.
+
 For development in this checkout:
 
 ```bash
-uv venv --python 3.10 .venv && source .venv/bin/activate
+uv venv --python 3.12 .venv && source .venv/bin/activate
 uv pip install -e ".[dev]"
 pre-commit install
 ```
@@ -55,9 +59,9 @@ virtual environment active when committing so the hooks can use its tools.
 1. Update `project.version` in `pyproject.toml` to the next `MAJOR.MINOR.PATCH`
    version and commit the change.
 2. Push the commit and publish a GitHub Release from a matching tag, for
-   example `v0.1.0` or `0.1.0`. The Release can create the tag for you.
+   example `v0.1.1` or `0.1.1`. The Release can create the tag for you.
 3. The GitHub Actions workflow runs lint, type checks, and tests on Python
-   3.10–3.12. It verifies that the release tag matches `project.version`,
+   3.12–3.14. It verifies that the release tag matches `project.version`,
    builds a wheel and source archive, checks the wheel import, and uploads both
    files to that Release. No PyPI account or publishing credentials are needed.
 
