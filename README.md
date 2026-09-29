@@ -43,7 +43,12 @@ For development in this checkout:
 ```bash
 uv venv --python 3.10 .venv && source .venv/bin/activate
 uv pip install -e ".[dev]"
+pre-commit install
 ```
+
+The pre-commit hooks run Ruff, mypy, and the unit tests before each commit.
+Run them on demand with `pre-commit run --all-files`. Keep the development
+virtual environment active when committing so the hooks can use its tools.
 
 ## Releases
 
