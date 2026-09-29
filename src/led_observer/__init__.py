@@ -1,5 +1,7 @@
 """LED cadence observer: optical state/blink-pattern verification for HIL rigs."""
 
+from importlib.metadata import version
+
 from led_observer.autofocus import AutofocusResult, autofocus_sweep, measure_sharpness
 from led_observer.calibration import (
     ROI,
@@ -65,4 +67,4 @@ __all__ = [
     "verify_sequence",
 ]
 
-__version__ = "0.1.0"
+__version__ = version("led-observer")

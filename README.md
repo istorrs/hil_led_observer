@@ -8,10 +8,56 @@ required.
 
 ## Install
 
+Install a release from GitHub without publishing to PyPI. Pinning a full commit
+SHA gives the most reproducible result; a release tag is also supported.
+
+In another project's `requirements.txt`:
+
+```text
+led-observer @ git+https://github.com/istorrs/hil_led_observer.git@v0.1.0
+```
+
+Or in its `pyproject.toml`:
+
+```toml
+[project]
+dependencies = [
+    "led-observer @ git+https://github.com/istorrs/hil_led_observer.git@v0.1.0",
+]
+```
+
+For a public repository, the prebuilt wheel attached to the GitHub Release can
+also be installed directly:
+
+```text
+led-observer @ https://github.com/istorrs/hil_led_observer/releases/download/v0.1.0/led_observer-0.1.0-py3-none-any.whl
+```
+
+The distribution name is `led-observer`; import it as `led_observer`. The Git
+forms require Git and repository access. The wheel URL requires access to the
+release asset. All forms install the runtime dependencies declared in
+`pyproject.toml`.
+
+For development in this checkout:
+
 ```bash
 uv venv --python 3.10 .venv && source .venv/bin/activate
 uv pip install -e ".[dev]"
 ```
+
+## Releases
+
+1. Update `project.version` in `pyproject.toml` to the next `MAJOR.MINOR.PATCH`
+   version and commit the change.
+2. Push the commit, then create and push a matching tag, for example
+   `git tag v0.1.0` and `git push origin v0.1.0`.
+3. The GitHub Actions workflow runs lint, type checks, and tests on Python
+   3.10–3.12. It verifies that the tag matches `project.version`, builds a
+   wheel and source archive, checks the wheel import, and attaches both files
+   to a GitHub Release. No PyPI account or publishing credentials are needed.
+
+The release files are available under the repository's **Releases** page. Use
+the new tag or a full commit SHA in consuming projects when upgrading.
 
 ## Develop
 
