@@ -4,10 +4,10 @@ build-backend = "hatchling.build"
 
 [project]
 name = "led-observer"
-version = "0.1.0"
+version = "0.2.0"
 description = "Optical LED state/cadence observer service for Hardware-In-The-Loop (HIL) test harnesses"
 readme = "README.md"
-requires-python = ">=3.10,<3.13"
+requires-python = ">=3.12,<3.15"
 license = { text = "MIT" }
 dependencies = [
     "opencv-python>=4.9,<5",
@@ -28,7 +28,7 @@ packages = ["src/led_observer"]
 
 [tool.ruff]
 line-length = 100
-target-version = "py310"
+target-version = "py312"
 src = ["src", "tests", "examples"]
 
 [tool.ruff.lint]
@@ -41,7 +41,7 @@ ignore = []
 known-first-party = ["led_observer", "tests"]
 
 [tool.mypy]
-python_version = "3.10"
+python_version = "3.12"
 strict = true
 files = ["src", "tests", "examples"]
 mypy_path = "src"
