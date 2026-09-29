@@ -3,8 +3,15 @@ name: CI and release
 on:
   push:
     branches: [main]
-    tags: ["v[0-9]*"]
   pull_request:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing GitHub Release tag to build and upload
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -17,6 +24,8 @@ jobs:
         python-version: ["3.10", "3.11", "3.12"]
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.tag || github.ref }}
       - uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python-version }}
@@ -31,20 +40,22 @@ jobs:
         run: python -m pytest -q
 
   release:
-    if: startsWith(github.ref, 'refs/tags/v')
+    if: github.event_name == 'release' || github.event_name == 'workflow_dispatch'
     needs: test
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.tag || github.ref }}
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
           cache: pip
       - name: Check tag matches package version
         env:
-          RELEASE_TAG: ${{ github.ref_name }}
+          RELEASE_TAG: ${{ inputs.tag || github.event.release.tag_name }}
         run: |
           python - <<'PY'
           import os
@@ -53,9 +64,9 @@ jobs:
 
           tag = os.environ["RELEASE_TAG"]
           version = tomllib.load(open("pyproject.toml", "rb"))["project"]["version"]
-          if not re.fullmatch(r"v[0-9]+\.[0-9]+\.[0-9]+", tag):
-              raise SystemExit(f"Release tag must be vMAJOR.MINOR.PATCH: {tag}")
-          if tag != f"v{version}":
+          if not re.fullmatch(r"v?[0-9]+\.[0-9]+\.[0-9]+", tag):
+              raise SystemExit(f"Release tag must be MAJOR.MINOR.PATCH or vMAJOR.MINOR.PATCH: {tag}")
+          if tag.removeprefix("v") != version:
               raise SystemExit(f"Tag {tag} does not match package version {version}")
           PY
       - name: Build distributions
@@ -68,7 +79,8 @@ jobs:
           python -m pip install dist/*.whl
           cd /tmp
           python -I -c 'import led_observer; from importlib.metadata import version; assert led_observer.__version__ == version("led-observer")'
-      - name: Publish GitHub Release
+      - name: Upload assets to GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh release create "$GITHUB_REF_NAME" dist/*.whl dist/*.tar.gz --verify-tag --generate-notes
+          RELEASE_TAG: ${{ inputs.tag || github.event.release.tag_name }}
+        run: gh release upload "$RELEASE_TAG" dist/*.whl dist/*.tar.gz
