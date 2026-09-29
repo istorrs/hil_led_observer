@@ -54,12 +54,17 @@ virtual environment active when committing so the hooks can use its tools.
 
 1. Update `project.version` in `pyproject.toml` to the next `MAJOR.MINOR.PATCH`
    version and commit the change.
-2. Push the commit, then create and push a matching tag, for example
-   `git tag v0.1.0` and `git push origin v0.1.0`.
+2. Push the commit and publish a GitHub Release from a matching tag, for
+   example `v0.1.0` or `0.1.0`. The Release can create the tag for you.
 3. The GitHub Actions workflow runs lint, type checks, and tests on Python
-   3.10–3.12. It verifies that the tag matches `project.version`, builds a
-   wheel and source archive, checks the wheel import, and attaches both files
-   to a GitHub Release. No PyPI account or publishing credentials are needed.
+   3.10–3.12. It verifies that the release tag matches `project.version`,
+   builds a wheel and source archive, checks the wheel import, and uploads both
+   files to that Release. No PyPI account or publishing credentials are needed.
+
+To retry or backfill an existing Release, run the **CI and release** workflow
+manually with its `tag` input. The tag must match the version in the tagged
+commit. The upload step leaves any existing assets intact and fails if an
+asset with the same name is already present.
 
 The release files are available under the repository's **Releases** page. Use
 the new tag or a full commit SHA in consuming projects when upgrading.
