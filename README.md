@@ -14,7 +14,7 @@ SHA gives the most reproducible result; a release tag is also supported.
 In another project's `requirements.txt`:
 
 ```text
-led-observer @ git+https://github.com/istorrs/hil_led_observer.git@v0.1.1
+led-observer @ git+https://github.com/istorrs/hil_led_observer.git@v0.2.0
 ```
 
 Or in its `pyproject.toml`:
@@ -22,7 +22,7 @@ Or in its `pyproject.toml`:
 ```toml
 [project]
 dependencies = [
-    "led-observer @ git+https://github.com/istorrs/hil_led_observer.git@v0.1.1",
+    "led-observer @ git+https://github.com/istorrs/hil_led_observer.git@v0.2.0",
 ]
 ```
 
@@ -30,7 +30,7 @@ For a public repository, the prebuilt wheel attached to the GitHub Release can
 also be installed directly:
 
 ```text
-led-observer @ https://github.com/istorrs/hil_led_observer/releases/download/v0.1.1/led_observer-0.1.1-py3-none-any.whl
+led-observer @ https://github.com/istorrs/hil_led_observer/releases/download/v0.2.0/led_observer-0.2.0-py3-none-any.whl
 ```
 
 The distribution name is `led-observer`; import it as `led_observer`. The Git
@@ -59,7 +59,7 @@ virtual environment active when committing so the hooks can use its tools.
 1. Update `project.version` in `pyproject.toml` to the next `MAJOR.MINOR.PATCH`
    version and commit the change.
 2. Push the commit and publish a GitHub Release from a matching tag, for
-   example `v0.1.1` or `0.1.1`. The Release can create the tag for you.
+   example `v0.2.0` or `0.2.0`. The Release can create the tag for you.
 3. The GitHub Actions workflow runs lint, type checks, and tests on Python
    3.12–3.14. It verifies that the release tag matches `project.version`,
    builds a wheel and source archive, checks the wheel import, and uploads both
