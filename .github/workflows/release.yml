@@ -79,6 +79,7 @@ jobs:
           python -m pip install dist/*.whl
           cd /tmp
           python -I -c 'import led_observer; from importlib.metadata import version; assert led_observer.__version__ == version("led-observer")'
+          led-observer-calibrate --help
       - name: Upload assets to GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
