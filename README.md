@@ -14,7 +14,7 @@ SHA gives the most reproducible result; a release tag is also supported.
 In another project's `requirements.txt`:
 
 ```text
-led-observer @ git+https://github.com/istorrs/hil_led_observer.git@v0.2.0
+led-observer @ git+https://github.com/istorrs/hil_led_observer.git@v0.3.0
 ```
 
 Or in its `pyproject.toml`:
@@ -22,7 +22,7 @@ Or in its `pyproject.toml`:
 ```toml
 [project]
 dependencies = [
-    "led-observer @ git+https://github.com/istorrs/hil_led_observer.git@v0.2.0",
+    "led-observer @ git+https://github.com/istorrs/hil_led_observer.git@v0.3.0",
 ]
 ```
 
@@ -30,7 +30,7 @@ For a public repository, the prebuilt wheel attached to the GitHub Release can
 also be installed directly:
 
 ```text
-led-observer @ https://github.com/istorrs/hil_led_observer/releases/download/v0.2.0/led_observer-0.2.0-py3-none-any.whl
+led-observer @ https://github.com/istorrs/hil_led_observer/releases/download/v0.3.0/led_observer-0.3.0-py3-none-any.whl
 ```
 
 The distribution name is `led-observer`; import it as `led_observer`. The Git
@@ -54,12 +54,25 @@ The pre-commit hooks run Ruff, mypy, and the unit tests before each commit.
 Run them on demand with `pre-commit run --all-files`. Keep the development
 virtual environment active when committing so the hooks can use its tools.
 
+## Calibrate a camera
+
+Installing the package also installs the `led-observer-calibrate` command:
+
+```bash
+led-observer-calibrate --camera 0 --duration 6.0 --out calibration.json
+```
+
+Point the camera at an already-blinking LED. The command saves a calibration
+profile and an `roi_debug.png` image in the current directory by default. Use
+`--out` and `--debug-image` to choose other paths; their parent directories
+are created as needed. OpenCV and NumPy are installed with the package.
+
 ## Releases
 
 1. Update `project.version` in `pyproject.toml` to the next `MAJOR.MINOR.PATCH`
    version and commit the change.
 2. Push the commit and publish a GitHub Release from a matching tag, for
-   example `v0.2.0` or `0.2.0`. The Release can create the tag for you.
+   example `v0.3.0` or `0.3.0`. The Release can create the tag for you.
 3. The GitHub Actions workflow runs lint, type checks, and tests on Python
    3.12–3.14. It verifies that the release tag matches `project.version`,
    builds a wheel and source archive, checks the wheel import, and uploads both
@@ -83,7 +96,7 @@ pytest                  # unit + integration tests
 pytest --cov            # with coverage report
 python examples/hil_integration_demo.py   # runnable demo, no hardware needed
 python scripts/record_frames.py --duration 60 --out recordings/run1 --autofocus  # record real hardware
-python scripts/auto_calibrate.py --camera 0 --duration 6.0   # auto-locate + calibrate a live blinking LED
+led-observer-calibrate --camera 0 --duration 6.0   # auto-locate + calibrate a live blinking LED
 ```
 
 ## Architecture
